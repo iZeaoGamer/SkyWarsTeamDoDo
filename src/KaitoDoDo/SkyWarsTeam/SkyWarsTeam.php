@@ -187,10 +187,6 @@ class SkyWarsTeam extends PluginBase implements Listener {
 			$statistic->set($player->getName(),array(0,0));
 			$statistic->save();
 		}
-		$player->getInventory()->clearAll();
-		$spawn = $this->getServer()->getDefaultLevel()->getSafeSpawn();
-		$this->getServer()->getDefaultLevel()->loadChunk($spawn->getFloorX(), $spawn->getFloorZ());
-		$player->teleport($spawn,0,0);
 	}
 	
 	public function onBlockBreak(BlockBreakEvent $event)
@@ -260,7 +256,7 @@ class SkyWarsTeam extends PluginBase implements Listener {
             }
         }
 	
-	public function onCommand(CommandSender $player, Command $cmd, $label, array $args) {
+	public function onCommand(CommandSender $player, Command $cmd, string $label, array $args): bool {
 		$lang = new Config($this->getDataFolder() . "/lang.yml", Config::YAML);
         switch($cmd->getName()){
 			case "stm":
@@ -696,15 +692,14 @@ class SkyWarsTeam extends PluginBase implements Listener {
         }
 }
 
-class RefreshSigns extends PluginTask {
+class RefreshSigns extends Task {
     public $prefix = TextFormat::GRAY . "[" . TextFormat::AQUA . TextFormat::BOLD . "Sky" . TextFormat::GREEN . "Wars§6Team" . TextFormat::RESET . TextFormat::GRAY . "]";
 	public function __construct($plugin)
 	{
 		$this->plugin = $plugin;
-		parent::__construct($plugin);
 	}
   
-	public function onRun($tick)
+	public function onRun(int $tick)
 	{
 		$allplayers = $this->plugin->getServer()->getOnlinePlayers();
 		$level = $this->plugin->getServer()->getDefaultLevel();
@@ -734,15 +729,14 @@ class RefreshSigns extends PluginTask {
 	}
 }
 
-class GameSender extends PluginTask {
+class GameSender extends Task {
     public $prefix = TextFormat::GRAY . "[" . TextFormat::AQUA . TextFormat::BOLD . "Sky" . TextFormat::GREEN . "Wars§6Team" . TextFormat::RESET . TextFormat::GRAY . "]";
 	public function __construct($plugin)
 	{
 		$this->plugin = $plugin;
-		parent::__construct($plugin);
 	}
   
-	public function onRun($tick)
+	public function onRun(int $tick)
 	{
 		$config = new Config($this->plugin->getDataFolder() . "/config.yml", Config::YAML);
 		$arenas = $config->get("arenas");
