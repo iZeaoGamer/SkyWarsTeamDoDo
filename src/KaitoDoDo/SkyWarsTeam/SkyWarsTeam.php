@@ -93,8 +93,8 @@ class SkyWarsTeam extends PluginBase implements Listener {
 		
 		$statistic = new Config($this->getDataFolder() . "/statistic.yml", Config::YAML);
 		$statistic->save();
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new GameSender($this), 20);
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new RefreshSigns($this), 10);
+		$this->getScheduler()->scheduleRepeatingTask(new GameSender($this), 20);
+		$this->getScheduler()->scheduleRepeatingTask(new RefreshSigns($this), 10);
         }
 	
 	public function onDeath(PlayerDeathEvent $event){
